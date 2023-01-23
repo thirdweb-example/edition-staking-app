@@ -33,10 +33,6 @@ const Stake: NextPage = () => {
   const { contract, isLoading } = useContract(stakingContractAddress);
   const { data: ownedNfts } = useOwnedNFTs(nftDropContract, address);
   const { data: tokenBalance } = useTokenBalance(tokenContract, address);
-  const { mutateAsync: claimRewards } = useContractWrite(
-    contract,
-    "claimRewards"
-  );
   const [claimableRewards, setClaimableRewards] = useState<BigNumber>();
   const { data: stakedTokens } = useContractRead(
     contract,
@@ -48,8 +44,12 @@ const Stake: NextPage = () => {
     if (!contract || !address) return;
 
     async function loadClaimableRewards() {
-      const stakeInfo = await contract?.call("getStakeInfo", address);
-      setClaimableRewards(stakeInfo[1][0]);
+      const stakeInfo = await contract?.call(
+        "getStakeInfoForToken",
+        0,
+        address
+      );
+      setClaimableRewards(stakeInfo[1]);
     }
 
     loadClaimableRewards();
@@ -103,7 +103,7 @@ const Stake: NextPage = () => {
           </div>
 
           <Web3Button
-            action={() => claimRewards([])}
+            action={(contract) => contract.call("claimRewards", 0)}
             contractAddress={stakingContractAddress}
           >
             Claim Rewards
