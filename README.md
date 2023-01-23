@@ -20,6 +20,7 @@ npx thirdweb create --template edition-staking-app
 - Create a [Token](https://thirdweb.com/thirdweb.eth/TokenERC20) contract using the dashboard.
 - Create an [Edition Staking](https://thirdweb.com/thirdweb.eth/EditionStake) contract using the dashboard.
 - Approve the Edition Staking contract to transfer your tokens.
+- Deposit the tokens into the Edition Staking contract.
 - Update the information in the [contractAddresses.ts](./consts/contractAddresses.ts) file to
 
 ## Join our Discord!
