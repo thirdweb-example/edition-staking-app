@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This example demonstrates a use of several thirdweb tools to create an NFT Staking application. In this example, users can stake their ERC721 NFTs and earn ERC20 tokens as a reward. It combines:
+This example demonstrates a use of several thirdweb tools to create an NFT Staking application. In this example, users can stake their ERC1155 NFTs and earn ERC20 tokens as a reward. It combines:
 
 - [Edition Drop contract](https://thirdweb.com/thirdweb.eth/DropERC1155): To create a collection of NFTs that users can stake.
 - [Token contract](https://thirdweb.com/thirdweb.eth/TokenERC20): To create a token that users can earn as a reward for staking.
