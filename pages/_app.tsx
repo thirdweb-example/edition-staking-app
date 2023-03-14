@@ -7,7 +7,7 @@ const activeChainId = ChainId.Mumbai;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider desiredChainId={activeChainId}>
+    <ThirdwebProvider activeChain={activeChainId}>
       <Component {...pageProps} />
     </ThirdwebProvider>
   );
