@@ -7,7 +7,10 @@ const activeChain = "mumbai";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider activeChain={activeChain}>
+    <ThirdwebProvider
+      clientId={process.env.CLIENT_ID}
+      activeChain={activeChain}
+    >
       <Component {...pageProps} />
     </ThirdwebProvider>
   );
