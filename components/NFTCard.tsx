@@ -13,9 +13,10 @@ import styles from "../styles/Home.module.css";
 
 interface NFTCardProps {
   tokenId: number;
+  totalQuantityStaked: number
 }
 
-const NFTCard: FC<NFTCardProps> = ({ tokenId }) => {
+const NFTCard: FC<NFTCardProps> = ({ tokenId, totalQuantityStaked }) => {
   const { contract } = useContract(editionDropContractAddress, "edition-drop");
   const { data: nft } = useNFT(contract, tokenId);
 
@@ -34,9 +35,20 @@ const NFTCard: FC<NFTCardProps> = ({ tokenId }) => {
             action={(contract) =>
               contract?.call("withdraw", [nft.metadata.id, 1])
             }
+            style={{
+              marginBottom: "5px",
+            }}
             contractAddress={stakingContractAddress}
           >
             Withdraw
+          </Web3Button>
+          <Web3Button
+            action={(contract) =>
+              contract?.call("withdraw", [nft.metadata.id, totalQuantityStaked.toString()])
+            }
+            contractAddress={stakingContractAddress}
+          >
+            Withdraw All
           </Web3Button>
         </div>
       )}
