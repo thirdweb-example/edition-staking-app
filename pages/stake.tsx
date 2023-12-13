@@ -34,6 +34,7 @@ const Stake: NextPage = () => {
   const { data: ownedNfts } = useOwnedNFTs(nftDropContract, address);
   const { data: tokenBalance } = useTokenBalance(tokenContract, address);
   const [claimableRewards, setClaimableRewards] = useState<BigNumber>();
+  const [quantity, setQuantity] = useState<Number>(1);
   const { data: stakedTokens } = useContractRead(contract, "getStakeInfo", [
     address,
   ]);
@@ -52,7 +53,7 @@ const Stake: NextPage = () => {
     loadClaimableRewards();
   }, [address, contract]);
 
-  async function stakeNft(id: string) {
+  async function stakeNft(id: string, quantityToStake: Number) {
     if (!address) return;
 
     const isApproved = await nftDropContract?.isApproved(
@@ -62,7 +63,7 @@ const Stake: NextPage = () => {
     if (!isApproved) {
       await nftDropContract?.setApprovalForAll(stakingContractAddress, true);
     }
-    await contract?.call("stake", [id, 1]);
+    await contract?.call("stake", [id, quantityToStake]);
   }
 
   if (isLoading) {
@@ -128,11 +129,39 @@ const Stake: NextPage = () => {
                   className={styles.nftMedia}
                 />
                 <h3>{nft.metadata.name}</h3>
+                <p>Owned - {nft.quantityOwned}</p>
+                <input
+                  type="number"
+                  min="1"
+                  max={nft.quantityOwned}
+                  defaultValue="1"
+                  style={{
+                    width: "150px", 
+                    borderRadius: "10px", 
+                    margin: "5px",
+                  }}
+                  onChange={(e) => {
+                    setQuantity(e.target.value);
+                  }}
+                />
+
                 <Web3Button
                   contractAddress={stakingContractAddress}
-                  action={() => stakeNft(nft.metadata.id)}
+                  action={() => stakeNft(nft.metadata.id, quantity)}
+                  style={{
+                    marginBottom: "5px",
+                  }}
                 >
                   Stake
+                </Web3Button>
+                <Web3Button
+                  contractAddress={stakingContractAddress}
+                  action={() => {
+
+                    stakeNft(nft.metadata.id, nft.quantityOwned);
+                  }}
+                >
+                  Stake All
                 </Web3Button>
               </div>
             ))}
