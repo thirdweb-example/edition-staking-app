@@ -159,7 +159,7 @@ const Stake: NextPage = () => {
                   contractAddress={stakingContractAddress}
                   action={() => {
 
-                    stakeNft(nft.metadata.id, nft.quantityOwned);
+                    stakeNft(nft.metadata.id, parseInt(nft?.quantityOwned!));
                   }}
                 >
                   Stake All
