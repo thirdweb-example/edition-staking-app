@@ -142,7 +142,7 @@ const Stake: NextPage = () => {
                     margin: "5px",
                   }}
                   onChange={(e) => {
-                    setQuantity(e.target.value);
+                    setQuantity(parseInt(e.target.value));
                   }}
                 />
 
