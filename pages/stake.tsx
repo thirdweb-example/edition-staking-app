@@ -19,6 +19,7 @@ import {
   tokenContractAddress,
 } from "../consts/contractAddresses";
 import styles from "../styles/Home.module.css";
+
 const Stake: NextPage = () => {
   const address = useAddress();
   const { contract: nftDropContract } = useContract(
@@ -32,17 +33,15 @@ const Stake: NextPage = () => {
   const { contract, isLoading } = useContract(stakingContractAddress);
   const { data: ownedNfts } = useOwnedNFTs(nftDropContract, address);
   const { data: tokenBalance } = useTokenBalance(tokenContract, address);
-  const [claimableRewards, setClaimableRewards] = useState
-    <BigNumber>
-    ();
-  const [quantity, setQuantity] = useState
-    <Number>
-    (1);
+  const [claimableRewards, setClaimableRewards] = useState<BigNumber>();
+  const [quantity, setQuantity] = useState<Number>(1);
   const { data: stakedTokens } = useContractRead(contract, "getStakeInfo", [
     address,
   ]);
+
   useEffect(() => {
     if (!contract || !address) return;
+
     async function loadClaimableRewards() {
       const stakeInfo = await contract?.call("getStakeInfoForToken", [
         0,
@@ -50,10 +49,13 @@ const Stake: NextPage = () => {
       ]);
       setClaimableRewards(stakeInfo[1]);
     }
+
     loadClaimableRewards();
   }, [address, contract]);
+
   async function stakeNft(id: string, quantityToStake: Number) {
     if (!address) return;
+
     const isApproved = await nftDropContract?.isApproved(
       address,
       stakingContractAddress
@@ -63,15 +65,16 @@ const Stake: NextPage = () => {
     }
     await contract?.call("stake", [id, quantityToStake]);
   }
+
   if (isLoading) {
-    return
-    <div className={styles.container}>Loading...</div>
-      ;
+    return <div className={styles.container}>Loading...</div>;
   }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>Stake Your NFTs</h1>
       <hr className={`${styles.divider} ${styles.spacerTop}`} />
+
       {!address ? (
         <ConnectWallet />
       ) : (
@@ -96,16 +99,18 @@ const Stake: NextPage = () => {
               </p>
             </div>
           </div>
+
           <Web3Button
             action={(contract) => contract.call("claimRewards", [0])}
             contractAddress={stakingContractAddress}
           >
             Claim Rewards
           </Web3Button>
+
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Your Staked NFTs</h2>
           <div className={styles.nftBoxGrid}>
-            {stakedTokens &&
+          {stakedTokens &&
               stakedTokens[0]?.map((stakedToken: BigNumber, index: any) => (
                 <NFTCard
                   tokenId={stakedToken.toNumber()}
@@ -114,6 +119,7 @@ const Stake: NextPage = () => {
                 />
               ))}
           </div>
+
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Your Unstaked NFTs</h2>
           <div className={styles.nftBoxGrid}>
@@ -131,14 +137,15 @@ const Stake: NextPage = () => {
                   max={nft.quantityOwned}
                   defaultValue="1"
                   style={{
-                    width: "150px",
-                    borderRadius: "10px",
+                    width: "150px", 
+                    borderRadius: "10px", 
                     margin: "5px",
                   }}
                   onChange={(e) => {
                     setQuantity(parseInt(e.target.value));
                   }}
                 />
+
                 <Web3Button
                   contractAddress={stakingContractAddress}
                   action={() => stakeNft(nft.metadata.id, quantity)}
@@ -151,6 +158,7 @@ const Stake: NextPage = () => {
                 <Web3Button
                   contractAddress={stakingContractAddress}
                   action={() => {
+
                     stakeNft(nft.metadata.id, parseInt(nft?.quantityOwned!));
                   }}
                 >
@@ -164,4 +172,5 @@ const Stake: NextPage = () => {
     </div>
   );
 };
+
 export default Stake;
